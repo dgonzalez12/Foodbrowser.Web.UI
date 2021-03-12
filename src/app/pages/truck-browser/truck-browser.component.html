@@ -1,0 +1,24 @@
+<h2 class="separate-top separate-bottom">Open Food Trucks Finder</h2>
+<div class="border border-1 rounded card">
+    <p>Select a day of the week and time to search for open food trucks.</p>
+    <form #filterForm="ngForm" class="row" (ngSubmit)="findTrucks()">
+        <div class="input-group col-md-3">
+            <span class="input-group-text" id="cbboxDayOfWeek1">Day</span>
+            <select class="form-select" id="cbboxDayOfWeek" name="dayOfWeek">
+                <option selected value="-1">None</option>
+                <option *ngFor="let day of daysOfWeek" value="{{day.number}}">{{day.name}}</option>
+            </select>
+        </div>
+        <div class="input-group col-md-3">
+            <span class="input-group-text" id="cbboxDayOfWeek1">Time</span>
+            <input type="time" class="form-control" placeholder="HH:mm" min="00:00" max="23:59" id="txboxTime"
+                name="time">
+        </div>
+        <div class="col-12 separate-top">
+            <button type="submit" class="btn btn-primary">Find Them!</button>
+            <div *ngIf="isLoading" class="spinner-border text-success align-middle" role="status">
+                <span class="visually-hidden"></span>
+            </div>
+        </div>
+    </form>
+</div>
