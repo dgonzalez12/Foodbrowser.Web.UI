@@ -4,7 +4,7 @@
     <form #filterForm="ngForm" class="row" (ngSubmit)="findTrucks()">
         <div class="input-group col-md-3">
             <span class="input-group-text" id="cbboxDayOfWeek1">Day</span>
-            <select class="form-select" id="cbboxDayOfWeek" name="dayOfWeek">
+            <select class="form-select" id="cbboxDayOfWeek" name="dayOfWeek" [(ngModel)]="dayOfWeek">
                 <option selected value="-1">None</option>
                 <option *ngFor="let day of daysOfWeek" value="{{day.number}}">{{day.name}}</option>
             </select>
@@ -12,7 +12,7 @@
         <div class="input-group col-md-3">
             <span class="input-group-text" id="cbboxDayOfWeek1">Time</span>
             <input type="time" class="form-control" placeholder="HH:mm" min="00:00" max="23:59" id="txboxTime"
-                name="time">
+                name="time" [(ngModel)]="time">
         </div>
         <div class="col-12 separate-top">
             <button type="submit" class="btn btn-primary">Find Them!</button>
@@ -22,3 +22,23 @@
         </div>
     </form>
 </div>
+<table class="table table-striped" *ngIf="trucks">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Start</th>
+            <th>End</th>
+          </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let truck of trucks | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
+            <td style="width: 40%;">{{truck.applicant}}</td>
+            <td style="width: 40%;">{{truck.location}}</td>
+            <td style="width: 10%;">{{truck.start24}}</td>
+            <td style="width: 10%;">{{truck.end24}}</td>
+          </tr>
+    </tbody>
+ </table>
+ <ngb-pagination  *ngIf="trucks" [collectionSize]="totalCount" [(page)]="page" [maxSize]="5" [rotate]="true" [ellipses]="false" [boundaryLinks]="true"></ngb-pagination>
+ 

@@ -11,32 +11,37 @@ import { Truck, TruckBrowserService } from 'src/lib/truck-browser';
 export class TruckBrowserComponent implements OnInit {
   @ViewChild('filterForm', { static: false }) filterForm: NgForm
   daysOfWeek = daysOfWeek;
-  dayOfWeek: number;
+  dayOfWeek: number = -1;
   time: string;
   isLoading = false;
   trucks: Truck[];
+  page = 1;
+  pageSize = 10;
+  totalCount = 0;
+
+  columnDefs=[{field: 'Applicant'}, {field: 'Location'}];
 
   constructor(private truckBrowserService: TruckBrowserService) { }
 
-  findTrucks() {
-    try {
-      const form = this.filterForm;
-      const dayNumber = this.dayOfWeek !== -1 ? this.dayOfWeek : null;
-      const timeString = this.time && this.time.length > 0 ? this.time : null;
-      this.isLoading = true;
-      this.truckBrowserService.findTrucks(dayNumber, timeString).subscribe(r =>
-        {
-          if (!r.Success) {
-            alert(r.Message);
-          }
-          this.trucks = r.Obj;
-        },
-        err => alert(err.message)
-      );
-      this.isLoading = false;
-    } catch (error) {
-      alert(error.message);
-    }
+  async findTrucks() {
+    this.isLoading = true;
+    const dayNumber = this.dayOfWeek.toString() !== '-1' ? this.dayOfWeek : null;
+    const timeString = this.time && this.time.length > 0 ? this.time : null;
+    this.truckBrowserService.findTrucks(dayNumber, timeString).subscribe(o =>
+      {
+        if (!o.success) {
+          alert(o.message);
+        } else {
+          this.trucks = o.obj;
+          this.totalCount = this.trucks.length;
+        }
+        this.isLoading = false;
+      },
+      err =>
+      {
+        alert(err.message);
+        this.isLoading = false;
+      });
   }
 
   ngOnInit(): void {

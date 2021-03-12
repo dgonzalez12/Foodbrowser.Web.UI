@@ -1,5 +1,5 @@
 export class BaseResponse<T> {
-    Success: boolean;
-    Message: string;
-    Obj: T;
+    success: boolean;
+    message: string;
+    obj: T;
 }
